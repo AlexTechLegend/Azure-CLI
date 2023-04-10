@@ -1,0 +1,40 @@
+# Creating a New VM using parameters.
+New-AzVm -ResourceGroupName "Enter RGName" -Name "Enter VM Name" -Credential (Get-Credential) -Location "Location you want" 
+-Image Canonical:0001-com-ubuntu-server-focal:20_04-lts:latest -OpenPorts 22 -PublicIpAddressName "Public IP Name"
+
+# In order to put all of that information into a variable.
+$vm = (Get-AzVM -Name "VM Name" -ResourceGroupName Enter RG Name)
+
+# Once completed you will have everything in the following:
+$vm
+
+# To Start VM
+Start-AzVM -Name $vm.Name -ResourceGroupName $vm.ResourceGroupName
+
+# To Stop VM
+Stop-AzVM -Name $vm.Name -ResourceGroupName $vm.ResourceGroupName
+
+# To Restart VM
+Restart-AzVM -Name $vm.Name -ResourceGroupName $vm.ResourceGroupName
+
+--------------------------------------------------------------------------------------------------------------------------------------------------
+
+# To delete the VM and everything with if you can do the following:
+Stop-AzVM -Name $vm.Name -ResourceGroupName $vm.ResourceGroupName | Remove-AzVM -Name $vm.Name -ResourceGroupName $vm.ResourceGroupName
+
+# Now to show what was left undeleted use:
+Get-AzResource -ResourceGroupName $vm.ResourceGroupName | Format-Table
+
+# Removing the Disk
+Get-AzDisk -ResourceGroupName $vm.ResourceGroupName -DiskName $vm.StorageProfile.OSDisk.Name | Remove-AzDisk -Force
+
+# Removing the VNET
+Get-AzVirtualNetwork -ResourceGroupName $vm.ResourceGroupName | Remove-AzVirtualNetwork -Force
+
+# Removing the NSG
+Get-AzNetworkSecurityGroup -ResourceGroupName $vm.ResourceGroupName | Remove-AzNetworkSecurityGroup -Force
+
+# Finally, Removing the PublicIP
+Get-AzPublicIpAddress -ResourceGroupName $vm.ResourceGroupName | Remove-AzPublicIpAddress -Force
+
+
