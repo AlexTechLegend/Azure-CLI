@@ -1,0 +1,8 @@
+# Use the following command if you come across an error such as: 
+"bash: ./myscriptname.sh: /bin/bash^M: bad interpreter: No such file or directory"
+
+sed -i -e 's/\r$//' scriptname.sh
+
+# The command you provided uses the sed command to edit a file in place (-i option) and 
+# remove any Windows-style carriage return characters (\r) at the end of each line 
+# (s/\r$// substitution expression). The file being edited is scriptname.sh.
