@@ -1,0 +1,132 @@
+#!/bin/bash
+
+# Prompt user for resource group name
+read -p "Enter resource group name: " resource_group
+
+# Prompt user for virtual machine name
+read -p "Enter virtual machine name: " vm_name
+
+# Prompt user for location
+echo "Enter location name (Using 1-6): 
+1. eastus
+2. westus
+3. northeurope
+4. westeurope
+5. southestasia
+6. To enter any other specific loaction. " 
+
+read -p "Enter your request: " answer
+
+# If statement to choose the image type
+if [ "$answer" == "1" ]; then
+    location="eastus"
+    echo "Continuing with the script."
+elif [ "$answer" == "2" ]; then
+    location="westus"
+    echo "Continuing with the script."
+elif [ "$answer" == "3" ]; then
+    location="northeurope"
+    echo "Continuing with the script."
+elif [ "$answer" == "4" ]; then
+    location="westeurope"
+    echo "Continuing with the script."
+elif [ "$answer" == "5" ]; then
+    location="southeastasia"
+    echo "Continuing with the script."
+elif [ "$answer" == "6" ]; then
+    read "Enter location name: " location
+    echo "Continuing with the script."
+fi
+
+# Prompt user for the VM Image
+echo "Enter VM image (Using 1-6): 
+1. Windows Server - "MicrosoftWindowsServer:WindowsServer:2019-datacenter"
+2. Ubuntu Server - "Canonical:UbuntuServer:18.04-LTS:latest"
+3. SQL Server - "MicrosoftSQLServer:SQL2019-WS2019:latest"
+4. CentOS - "OpenLogic:CentOS:7.5:latest"
+5. Debian - "Debian:debian-10:latest"
+6. Windows 10 Pro - "MicrosoftWindowsDesktop:Windows-10:20h2-pro:latest" 
+" 
+
+read -p "Enter your request: " answer2
+
+# If statement to choose the iage type
+if [ "$answer2" == "1" ]; then
+    image="MicrosoftWindowsServer:WindowsServer:2019-datacenter"
+    echo "Continuing with the script."
+elif [ "$answer2" == "2" ]; then
+    image="Canonical:UbuntuServer:18.04-LTS:latest"
+    echo "Continuing with the script."
+elif [ "$answer2" == "3" ]; then
+    image="MicrosoftSQLServer:SQL2019-WS2019:latest"
+    echo "Continuing with the script."
+elif [ "$answer2" == "4" ]; then
+    image="OpenLogic:CentOS:7.5:latest"
+    echo "Continuing with the script."
+elif [ "$answer2" == "5" ]; then
+    image="Debian:debian-10:latest"
+    echo "Continuing with the script."
+elif [ "$answer2" == "6" ]; then
+    image="MicrosoftWindowsDesktop:Windows-10:20h2-pro:latest"
+    echo "Continuing with the script."
+fi
+
+# Prompt user for the VM Image size
+echo "Enter location name (Using 1-8): 
+1. Standard_B1ls: 1 vCPUs, 0.5 GB RAM
+2  Standard_B1s: 1 vCPUs, 1 GB RAM
+3. Standard_B2s: 2 vCPUs, 4 GB RAM
+4. Standard_A2_v2: 2 vCPUs, 4 GB RAM
+5. Standard_DS1_v2: 1 vCPUs, 3.5 GB RAM
+6. Standard_D2_v2: 2 vCPUs, 7 GB RAM
+7. Standard_D2s_v3: 2 vCPUs, 8 GB RAM 
+8. To enter any other specific size. " 
+
+read -p "Enter your request: " answer
+
+# If statement to choose the image size
+if [ "$answer" == "1" ]; then
+    vm_size="Standard_B1ls"
+    echo "Continuing with the script."
+elif [ "$answer" == "2" ]; then
+    vm_size="Standard_B1s"
+    echo "Continuing with the script."
+elif [ "$answer" == "3" ]; then
+    vm_sizen="Standard_B2s"
+    echo "Continuing with the script."
+elif [ "$answer" == "4" ]; then
+    vm_size="Standard_A2_v2"
+    echo "Continuing with the script."
+elif [ "$answer" == "5" ]; then
+    vm_sizen="Standard_DS1_v2"
+    echo "Continuing with the script."
+    elif [ "$answer" == "6" ]; then
+    vm_sizen="Standard_D2_v2"
+    echo "Continuing with the script."
+    elif [ "$answer" == "7" ]; then
+    vm_sizen="Standard_D2s_v3"
+    echo "Continuing with the script."
+elif [ "$answer" == "8" ]; then
+    read "Enter the size: " vm_size
+    echo "Continuing with the script."
+fi
+
+# Prompt user for admin username
+read -p "Enter admin username: " admin_user
+
+# Prompt user for admin password
+read -s -p "Enter admin password: " admin_password
+
+# Create the resource group
+az group create --name $resource_group --location $location
+
+# Create the virtual machine
+az vm create \
+  --resource-group $resource_group \
+  --name $vm_name \
+  --image $image \
+  --admin-username $admin_user \
+  --authentication-type password \
+  --admin-password $admin_password \
+  --generate-ssh-keys \
+  --size $vm_size
